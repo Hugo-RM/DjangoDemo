@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LeetCode Problem Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .difficulty-section { margin-bottom: 30px; }
+        .difficulty-header { color: #333; border-bottom: 2px solid #ddd; }
+        .easy { border-left: 4px solid green; }
+        .medium { border-left: 4px solid orange; }
+        .hard { border-left: 4px solid red; }
+        .problem-list { list-style: none; padding: 0; }
+        .problem-item { 
+            padding: 10px; 
+            margin: 5px 0; 
+            background: #f9f9f9; 
+            border-radius: 4px; 
+        }
+        .problem-item a { text-decoration: none; color: #333; }
+        .problem-item:hover { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>LeetCode Problem Tracker</h1>
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'stats' %}" style="background: #007cba; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px;">View Stats</a>
+    </div>
+    <p>Problems organized by difficulty for progressive learning</p>
+
+    <div class="filters-section" style="background: #f0f0f0; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+        <h3>Filter Problems</h3>
+        <form method="get" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end;">
+            <div>
+                <label>Search:</label>
+                <input type="text" name="search" value="{{ search_query }}" placeholder="Problem title or topic..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            </div>
+            
+            <div>
+                <label>Difficulty:</label>
+                <select name="difficulty" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">All Difficulties</option>
+                    <option value="Easy" {% if current_difficulty == 'Easy' %}selected{% endif %}>Easy</option>
+                    <option value="Medium" {% if current_difficulty == 'Medium' %}selected{% endif %}>Medium</option>
+                    <option value="Hard" {% if current_difficulty == 'Hard' %}selected{% endif %}>Hard</option>
+                </select>
+            </div>
+            
+            <div>
+                <label>Topic:</label>
+                <select name="topic" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">All Topics</option>
+                    {% for topic in all_topics %}
+                        <option value="{{ topic }}" {% if current_topic == topic %}selected{% endif %}>{{ topic }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div>
+                <label>Status:</label>
+                <select name="status" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">All Problems</option>
+                    <option value="solved" {% if current_status == 'solved' %}selected{% endif %}>Solved Only</option>
+                    <option value="unsolved" {% if current_status == 'unsolved' %}selected{% endif %}>Unsolved Only</option>
+                </select>
+            </div>
+            
+            <div>
+                <button type="submit" style="background: #007cba; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;">Apply Filters</button>
+                <a href="{% url 'home' %}" style="background: #666; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; margin-left: 5px;">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="difficulty-section easy">
+        <h2 class="difficulty-header">Easy Problems</h2>
+        <ul class="problem-list">
+            {% for problem in easy_problems %}
+                <li class="problem-item">
+                    <a href="{% url 'problem_detail' problem.id %}">
+                        {{ problem.number }}. {{ problem.title }} - {{ problem.topic }}
+                    </a>
+                </li>
+            {% empty %}
+                <li>No easy problems yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="difficulty-section medium">
+        <h2 class="difficulty-header">Medium Problems</h2>
+        <ul class="problem-list">
+            {% for problem in medium_problems %}
+                <li class="problem-item">
+                    <a href="{% url 'problem_detail' problem.id %}">
+                        {{ problem.number }}. {{ problem.title }} - {{ problem.topic }}
+                    </a>
+                </li>
+            {% empty %}
+                <li>No medium problems yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="difficulty-section hard">
+        <h2 class="difficulty-header">Hard Problems</h2>
+        <ul class="problem-list">
+            {% for problem in hard_problems %}
+                <li class="problem-item">
+                    <a href="{% url 'problem_detail' problem.id %}">
+                        {{ problem.number }}. {{ problem.title }} - {{ problem.topic }}
+                    </a>
+                </li>
+            {% empty %}
+                <li>No hard problems yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

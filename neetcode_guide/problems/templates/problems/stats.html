@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Progress Stats - LeetCode Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .back-link { margin-bottom: 20px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: #f9f9f9; padding: 20px; border-radius: 8px; text-align: center; }
+        .stat-number { font-size: 2em; font-weight: bold; color: #007cba; }
+        .progress-section { margin: 30px 0; }
+        .progress-bar { background: #ddd; border-radius: 10px; overflow: hidden; height: 20px; margin: 10px 0; }
+        .progress-fill { height: 100%; transition: width 0.3s ease; }
+        .easy-progress { background: green; }
+        .medium-progress { background: orange; }
+        .hard-progress { background: red; }
+        .recent-attempts { margin-top: 30px; }
+        .attempt-item { background: #f0f0f0; padding: 10px; margin: 5px 0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="back-link">
+        <a href="{% url 'home' %}">&larr; Back to Problems</a>
+    </div>
+
+    <h1>Your Progress Stats</h1>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ solved_count }}</div>
+            <div>Problems Solved</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ total_attempts }}</div>
+            <div>Total Attempts</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ total_problems }}</div>
+            <div>Total Problems</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ overall_percent }}%</div>
+            <div>Completion Rate</div>
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <h3>Progress by Difficulty</h3>
+        
+        <div>
+            <strong>Easy ({{ easy_solved }}/{{ easy_total }})</strong>
+            <div class="progress-bar">
+                <div class="progress-fill easy-progress" style="width: {{ easy_percent }}%;"></div>
+            </div>
+        </div>
+
+        <div>
+            <strong>Medium ({{ medium_solved }}/{{ medium_total }})</strong>
+            <div class="progress-bar">
+                <div class="progress-fill medium-progress" style="width: {{ medium_percent }}%;"></div>
+            </div>
+        </div>
+
+        <div>
+            <strong>Hard ({{ hard_solved }}/{{ hard_total }})</strong>
+            <div class="progress-bar">
+                <div class="progress-fill hard-progress" style="width: {{ hard_percent }}%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="recent-attempts">
+        <h3>Recent Activity</h3>
+        {% for attempt in recent_attempts %}
+            <div class="attempt-item">
+                <strong>{{ attempt.problem.title }}</strong> - {{ attempt.status }} 
+                <small>({{ attempt.date_attempted|date:"M j, g:i A" }})</small>
+            </div>
+        {% empty %}
+            <p>No attempts yet!</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
