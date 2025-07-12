@@ -1,0 +1,51 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+    
+    - name: Install dependency
+      run: |
+        pip install Django==3.2.25
+    
+    - name: Set up Django project
+      run: |
+        cd neetcode_guide
+        python manage.py migrate
+        python manage.py load_neetcode_problems
+    
+    - name: Run Django tests
+      run: |
+        cd neetcode_guide
+        python manage.py test
+    
+    - name: Check if server starts
+      run: |
+        cd neetcode_guide
+        timeout 5s python manage.py runserver &
+        sleep 5
+        curl -f http://127.0.0.1:8000/ || exit 1
+    
+    - name: Check admin interface
+      run: |
+        cd neetcode_guide
+        python manage.py check
+    
+    - name: Verify database setup
+      run: |
+        cd neetcode_guide
+        python manage.py shell -c "from problems.models import Problem; print(f'Problems loaded: {Problem.objects.count()}')"
