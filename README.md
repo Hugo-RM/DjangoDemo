@@ -12,9 +12,11 @@ This will not be a big project and is simply for the DjangoDemo thing but I want
 
 ## Dependencies
 
-Unfortunately, I couldn't get the Python and Django versions to work. I tried Django 2.0.7 and 2.1.7 as those were the two mentioned. Both failed to run due to distutils and incompatability with the python version used in github codespace. That is why I used Django 3.2.25
+Unfortunately, I couldn't get the Python and Django versions to work. I tried Django 2.0.7 and 2.1.7 as those were the two mentioned. Both failed to run due to distutils and incompatability with the python version used in github codespace. 
 
-These are the commands I ran (creating the virtual environment also didn't go smoothly because the workspace uses python 3.12.1 and the command was for python 3.8)
+After looking through the slack 202A channel, I found that the solution provided was no longer on the google doc and everyone seemed to solve the problem by using a compatible version. That is why I used Django 3.2.25.
+
+These are the commands I ran (creating the virtual environment also didn't go smoothly because the workspace uses python 3.12.1 and the command was for python 3.8):
 
 ```.bash
 virtualenv --python=python3 myvenv
