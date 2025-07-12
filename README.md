@@ -32,6 +32,6 @@ virtualenv --python=python3 myvenv
 pip install Django==3.2.25
 cd neetcode_guide
 python manage.py migrate
-python manage.py load_neetcode_problems.py
+python manage.py load_neetcode_problems
 python manage.py runserver
 ```
