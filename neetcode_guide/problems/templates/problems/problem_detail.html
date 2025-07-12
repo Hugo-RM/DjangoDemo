@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ problem.title }} - LeetCode Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .back-link { margin-bottom: 20px; }
+        .problem-header { 
+            border-bottom: 2px solid #ddd; 
+            padding-bottom: 10px; 
+            margin-bottom: 20px; 
+        }
+        .difficulty { 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            color: white; 
+            font-weight: bold; 
+        }
+        .easy { background-color: green; }
+        .medium { background-color: orange; }
+        .hard { background-color: red; }
+        .attempts-section { margin-top: 30px; }
+        .attempt-item { 
+            background: #f9f9f9; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 4px; 
+        }
+        .status { font-weight: bold; }
+        .todo { color: gray; }
+        .attempted { color: orange; }
+        .solved { color: green; }
+    </style>
+</head>
+<body>
+    <div class="back-link">
+        <a href="{% url 'home' %}">&larr; Back to Problem List</a>
+    </div>
+
+    <div class="problem-header">
+        <h1>{{ problem.number }}. {{ problem.title }}</h1>
+        <p>
+            <span class="difficulty {{ problem.difficulty|lower }}">{{ problem.difficulty }}</span>
+            <strong>Topic:</strong> {{ problem.topic }}
+        </p>
+        {% if problem.leetcode_url %}
+            <p><a href="{{ problem.leetcode_url }}" target="_blank">View on LeetCode →</a></p>
+        {% endif %}
+    </div>
+
+    <div class="attempts-section">
+        <h3>Your Attempts</h3>
+        {% for attempt in attempts %}
+            <div class="attempt-item">
+                <p class="status {{ attempt.status|lower }}">Status: {{ attempt.status }}</p>
+                <p><strong>Date:</strong> {{ attempt.date_attempted|date:"F j, Y g:i A" }}</p>
+                {% if attempt.notes %}
+                    <p><strong>Notes:</strong> {{ attempt.notes }}</p>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>No attempts yet. <a href="/admin/problems/attempt/add/">Add your first attempt →</a></p>
+        {% endfor %}
+    </div>
+    <div class="add-attempt-section">
+        <h3>Add New Attempt</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Status:</label>
+                {{ form.status }}
+            </div>
+            <div class="form-group">
+                <label>Notes:</label>
+                {{ form.notes }}
+            </div>
+            <button type="submit">Add Attempt</button>
+        </form>
+    </div>
+
+    <style>
+        .add-attempt-section { 
+            margin-top: 30px; 
+            padding: 20px; 
+            background: #f0f0f0; 
+            border-radius: 4px; 
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group select, .form-group textarea { 
+            width: 100%; 
+            padding: 8px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+        }
+        button { 
+            background: #007cba; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+        }
+        button:hover { background: #005a87; }
+    </style>
+</body>
+</html>
