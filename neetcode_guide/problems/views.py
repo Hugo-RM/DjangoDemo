@@ -42,7 +42,30 @@ def home(request):
     medium_problems = problems.filter(difficulty='Medium').order_by('number')
     hard_problems = problems.filter(difficulty='Hard').order_by('number')
     
-    all_topics = Problem.objects.values_list('topic', flat=True).distinct().order_by('topic')
+    # Neetcode's topic order
+    neetcode_topic_order = [
+        "Arrays & Hashing",
+        "Two Pointers",
+        "Stack",
+        "Binary Search",
+        "Sliding Window",
+        "Linked List",
+        "Math & Geometry",
+        "Bit Manipulation",
+        "Trees",
+        "Tries",
+        "Backtracking",
+        "Heap / Priority Queue",
+        "Graphs",
+        "Dynamic Programming",
+        "Intervals",
+        "Greedy"
+    ]
+    # Only include topics that exist in the DB, in Neetcode's order
+    db_topics = list(Problem.objects.values_list('topic', flat=True).distinct())
+    all_topics = [topic for topic in neetcode_topic_order if topic in db_topics]
+    # Add any extra topics not in the list (just in case)
+    all_topics += [topic for topic in db_topics if topic not in all_topics]
     
     context = {
         'easy_problems': easy_problems,
